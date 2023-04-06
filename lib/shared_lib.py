@@ -64,10 +64,10 @@ def select_role(driver, role):
 def evaluate_UAC_result(result):
     if result[0] == True:
         print('UAC PASSED:', result[1])
-        return 0
+        return 1
     else:
         print('UAC FAILED:', result[1])
-        return 1
+        return 0
     
 def select_module(driver, module):
     # find the element by the link text "Ver certificados"

@@ -7,7 +7,7 @@ import utils.datetime_id as id
 def aggr_usu_test(driver, username, nombres, apellidos, tipo_doc, num_doc, roles):
 
     UAC = 2
-    fails = 0
+    passed = 0
 
     try:
 
@@ -26,15 +26,15 @@ def aggr_usu_test(driver, username, nombres, apellidos, tipo_doc, num_doc, roles
         time.sleep(5)
         shared.search(driver, 'Usuarios', username)
         result = shared.UAC_check_unique_record(driver, 'Usuarios', username)
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
         result = shared.UAC_validate_saved_record(driver, 'Usuarios', [username, ' '.join(roles)])
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
 
-        print(f'AGGR USU: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'AGGR USU: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
         print(str(e))
-        print(f'AGGR USU: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'AGGR USU: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":
     driver = shared.init_driver()

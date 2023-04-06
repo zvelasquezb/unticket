@@ -8,7 +8,7 @@ import lib.shared_lib as shared
 def logout_test(driver):
 
     UAC = 11
-    fails = 0
+    passed = 0
 
     try:
 
@@ -18,7 +18,7 @@ def logout_test(driver):
 
         # User Acceptance Criteria Check
         result = shared.UAC_check_current_url(driver, 'bienvenida')
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
 
         for urlkey in URLs.keys():
 
@@ -30,13 +30,13 @@ def logout_test(driver):
 
             # User Acceptance Criteria Check
             result = shared.UAC_check_redirection(driver, urlkey, 'bienvenida')
-            fails += shared.evaluate_UAC_result(result)
+            passed += shared.evaluate_UAC_result(result)
 
-        print(f'LOGOUT: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'LOGOUT: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
         print(str(e))
-        print(f'LOGOUT: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'LOGOUT: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":
     driver = shared.init_driver()

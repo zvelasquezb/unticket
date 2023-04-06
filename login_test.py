@@ -7,7 +7,7 @@ import lib.shared_lib as shared
 def login_test(driver, username, password):
 
     UAC = 4
-    fails = 0
+    passed = 0
 
     try:
 
@@ -23,7 +23,7 @@ def login_test(driver, username, password):
         
         # User Acceptance Criteria Check
         result = login.UAC_check_unal_domain(driver)
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
         
         login.login_to_unal_ldap(driver, username, password)
         
@@ -39,7 +39,7 @@ def login_test(driver, username, password):
         
         # User Acceptance Criteria Check
         result = login.UAC_check_google_unal_domain(driver)
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
 
         login.login_to_google(driver, username)
 
@@ -47,7 +47,7 @@ def login_test(driver, username, password):
 
         # User Acceptance Criteria Check
         result = login.UAC_check_unal_domain(driver)
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
         
         
         login.login_to_unal_ldap(driver, username, password)
@@ -58,13 +58,13 @@ def login_test(driver, username, password):
 
         # User Acceptance Criteria Check
         result = shared.UAC_check_current_url(driver, 'perfil')
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
 
-        print(f'LOGIN: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'LOGIN: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
         print(str(e))
-        print(f'LOGIN: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'LOGIN: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":
     driver = shared.init_driver()

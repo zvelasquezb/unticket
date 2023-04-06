@@ -7,7 +7,7 @@ import utils.datetime_id as id
 def aggr_cert_test(driver, nombre, precio, recaudo, desc, nivel, programas):
 
     UAC = 2
-    fails = 0
+    passed = 0
 
     try:
 
@@ -27,15 +27,15 @@ def aggr_cert_test(driver, nombre, precio, recaudo, desc, nivel, programas):
         time.sleep(5)
         shared.search(driver, 'Certificados', nombre)
         result = shared.UAC_check_unique_record(driver, 'Certificados', nombre)
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
         result = shared.UAC_validate_saved_record(driver, 'Certificados', [nombre, nivel, 'Habilitado'])
-        fails += shared.evaluate_UAC_result(result)
+        passed += shared.evaluate_UAC_result(result)
 
-        print(f'AGGR CERT: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'AGGR CERT: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
         print(str(e))
-        print(f'AGGR CERT: {UAC - fails}/{UAC} UAC PASSED')
+        print(f'AGGR CERT: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":
     driver = shared.init_driver()
