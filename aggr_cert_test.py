@@ -34,7 +34,7 @@ def aggr_cert_test(driver, nombre, precio, recaudo, desc, nivel, programas):
         print(f'AGGR CERT: {UAC - fails}/{UAC} UAC PASSED')
 
     except Exception as e:
-        print(e)
+        print(str(e))
         print(f'AGGR CERT: {UAC - fails}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":

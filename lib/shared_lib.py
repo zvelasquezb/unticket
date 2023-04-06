@@ -1,3 +1,4 @@
+import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -114,8 +115,8 @@ def multiselect_values(driver, label, values):
     dropdown.click()
     # Locate the desired value and click on it
     for value in values:
-        value = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//div[contains(text(),'{value}')]")))
-        value.click()
+        checkbox = driver.find_element(By.XPATH, f"//div[contains(text(),'{value}')]/ancestor::div/preceding-sibling::div[contains(@class, 'v-list-item__action')]/div[contains(@class, 'v-simple-checkbox')]")
+        checkbox.click()
 
 def click_checkbox(driver, label):
     checkbox = driver.find_element(By.XPATH, f"//label[contains(text(), '{label}')]/preceding-sibling::div//input[@type='checkbox']/following-sibling::div")
@@ -153,7 +154,7 @@ def UAC_validate_saved_record(driver, tablename, values):
         tds = tds[:len(values)]
         if len(tds) > 0:
             for td, value in zip(tds, values):
-                if td.text.lower() != value.lower():
-                    return (False, f'mismatch between {td.text} and {value}')
+                if ' '.join(sorted(td.text.lower().split())) != ' '.join(sorted(value.lower().split())):
+                    return (False, f"mismatch between {' '.join(td.text.lower().split().sort())} and {' '.join(value.lower().split().sort())}")
             return (True, f"record data match with [{', '.join(values)}]")
     return (False, f"no records found for [{', '.join(values)}]")

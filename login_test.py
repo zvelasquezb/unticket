@@ -63,7 +63,7 @@ def login_test(driver, username, password):
         print(f'LOGIN: {UAC - fails}/{UAC} UAC PASSED')
 
     except Exception as e:
-        print(e)
+        print(str(e))
         print(f'LOGIN: {UAC - fails}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":
