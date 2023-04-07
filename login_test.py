@@ -3,6 +3,7 @@ import time
 from getpass import getpass
 import lib.login_lib as login
 import lib.shared_lib as shared
+import traceback
 
 def login_test(driver, username, password):
 
@@ -63,7 +64,7 @@ def login_test(driver, username, password):
         print(f'LOGIN: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
-        print(str(e))
+        traceback.print_exc()
         print(f'LOGIN: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":

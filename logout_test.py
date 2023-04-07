@@ -4,6 +4,7 @@ from login_test import login_test as login
 from utils.urls import URLs
 import lib.logout_lib as logout
 import lib.shared_lib as shared
+import traceback
 
 def logout_test(driver):
 
@@ -35,7 +36,7 @@ def logout_test(driver):
         print(f'LOGOUT: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
-        print(str(e))
+        traceback.print_exc()
         print(f'LOGOUT: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":

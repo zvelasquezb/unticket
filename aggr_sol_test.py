@@ -4,6 +4,7 @@ from login_test import login_test as login
 import lib.shared_lib as shared
 import utils.datetime_id as id
 import os
+import traceback
 
 def aggr_sol_test(driver, nombres, apellidos, tipo_doc, num_doc, email, celular, grupo, programa, estado_usu, cert, observaciones, medio_pago, num_consig, nota_interna):
 
@@ -38,13 +39,13 @@ def aggr_sol_test(driver, nombres, apellidos, tipo_doc, num_doc, email, celular,
         shared.click_button(driver, 'Crear')
         time.sleep(5)
         # we check first row to see if record was saved : it should work because data is ordered by date descending by default
-        result = shared.UAC_validate_saved_record(driver, 'Solicitudes', ['', f'{nombres} {apellidos}', '', 'Radicado'])
+        result = shared.UAC_validate_saved_record(driver, 'Solicitudes', [None, f'{nombres} {apellidos}', None, 'Radicado'], 0)
         passed += shared.evaluate_UAC_result(result)
 
         print(f'AGGR SOL: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
-        print(str(e))
+        traceback.print_exc()
         print(f'AGGR SOL: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":

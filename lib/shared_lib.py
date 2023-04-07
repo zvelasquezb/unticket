@@ -90,6 +90,11 @@ def enter_input_value(driver, label, value):
     # Find the input element next to the label
     input_element = label_element.find_element(By.XPATH, "./following-sibling::input")
 
+    input_element.send_keys(Keys.CONTROL + "a")
+    input_element.send_keys(Keys.DELETE)
+
+    time.sleep(1)
+
     # Enter the desired value into the input element
     input_element.send_keys(value)
 
@@ -100,14 +105,18 @@ def enter_textarea_value(driver, label, value):
     # Find the input element next to the label
     input_element = label_element.find_element(By.XPATH, "./following-sibling::textarea")
 
+    input_element.send_keys(Keys.CONTROL + "a")
+    input_element.send_keys(Keys.DELETE)
+
     # Enter the desired value into the input element
     input_element.send_keys(value)
 
 def select_value(driver, label, value):
     dropdown = driver.find_element(By.XPATH, f"//label[contains(text(),'{label}')]/following-sibling::div[@class='v-select__selections']")
     dropdown.click()
+    time.sleep(2)
     # Locate the desired value and click on it
-    value = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.XPATH, f"//div[contains(text(),'{value}')]")))
+    value = driver.find_element(By.XPATH, f"//div[contains(@class, 'menuable__content__active')]//div[contains(text(),'{value}')]")
     value.click()
 
 def multiselect_values(driver, label, values):
@@ -132,6 +141,9 @@ def search(driver, label, value):
     # Find the input field within the div element of text "text"
     input_field = driver.find_element(By.XPATH, f"//div[contains(text(), '{label}')]//input")
 
+    input_field.send_keys(Keys.CONTROL + "a")
+    input_field.send_keys(Keys.DELETE)
+
     # Type text into the input field
     input_field.send_keys(value)
 
@@ -144,17 +156,60 @@ def UAC_check_unique_record(driver, tablename, value):
     return (False, f'multiple records found for {value}')
 
 
-def UAC_validate_saved_record(driver, tablename, values):
+def UAC_validate_saved_record(driver, tablename, values, idx):
+
     table = driver.find_element(By.XPATH, f"//div[contains(text(), '{tablename}')]/following-sibling::div//table")
     tbody = table.find_element(By.TAG_NAME, 'tbody')
     rows = tbody.find_elements(By.TAG_NAME, 'tr')
     if len(rows) > 0:
-        row = rows[0]
+        row = rows[idx]
         tds = row.find_elements(By.TAG_NAME, 'td')
         tds = tds[:len(values)]
         if len(tds) > 0:
             for td, value in zip(tds, values):
-                if ' '.join(sorted(td.text.lower().split())) != ' '.join(sorted(value.lower().split())):
-                    return (False, f"mismatch between {' '.join(td.text.lower().split().sort())} and {' '.join(value.lower().split().sort())}")
-            return (True, f"record data match with [{', '.join(values)}]")
+                if value == None:
+                    continue
+                real_value = ' '.join(sorted(td.text.lower().split())) 
+                expected_value = ' '.join(sorted(value.lower().split()))
+                print(real_value, expected_value)
+                if real_value != expected_value:
+                    return (False, f"mismatch between: [{real_value}] and {expected_value}]")
+            return (True, f"record data match with [{values}]")
     return (False, f"no records found for [{', '.join(values)}]")
+
+def click_edit_button(driver, tablename, idx):
+    table = driver.find_element(By.XPATH, f"//div[contains(text(), '{tablename}')]/following-sibling::div//table")
+    tbody = table.find_element(By.TAG_NAME, 'tbody')
+    rows = tbody.find_elements(By.TAG_NAME, 'tr')
+    if len(rows) > 0:
+        row = rows[idx]
+        tds = row.find_elements(By.TAG_NAME, 'td')
+        button = tds[-1].find_elements(By.TAG_NAME, 'button')[1]
+        button.click()
+    else:
+        raise Exception('No records found')
+    
+def click_eye_button(driver, tablename, idx):
+    table = driver.find_element(By.XPATH, f"//div[contains(text(), '{tablename}')]/following-sibling::div//table")
+    tbody = table.find_element(By.TAG_NAME, 'tbody')
+    rows = tbody.find_elements(By.TAG_NAME, 'tr')
+    if len(rows) > 0:
+        row = rows[idx]
+        tds = row.find_elements(By.TAG_NAME, 'td')
+        button = tds[-1].find_elements(By.TAG_NAME, 'button')[0]
+        button.click()
+    else:
+        raise Exception('No records found')
+    
+
+def read_cert_status(driver, idx):
+    table = driver.find_element(By.XPATH, f"//div[contains(text(), 'Certificados')]/following-sibling::div//table")
+    tbody = table.find_element(By.TAG_NAME, 'tbody')
+    rows = tbody.find_elements(By.TAG_NAME, 'tr')
+    if len(rows) > 0:
+        row = rows[idx]
+        tds = row.find_elements(By.TAG_NAME, 'td')
+        status = tds[2].text
+        return status
+    else:
+        raise Exception('No records found')
