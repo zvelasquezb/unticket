@@ -213,3 +213,29 @@ def read_cert_status(driver, idx):
         return status
     else:
         raise Exception('No records found')
+    
+
+def UAC_check_search_results(driver, tablename, keyword, column, unique, expected):
+    table = driver.find_element(By.XPATH, f"//div[contains(text(), '{tablename}')]/following-sibling::div//table")
+    tbody = table.find_element(By.TAG_NAME, 'tbody')
+    rows = tbody.find_elements(By.TAG_NAME, 'tr')
+    if len(rows) == 1 and rows[0].text == 'No matching records found':
+        if expected:
+            return (False, f'no records found for {keyword}')
+        return (True, f'no records found for {keyword} as expected')
+    if unique:
+        if len(rows) > 1:
+            return (False, f'multiple records found for {keyword}')
+        row = rows[0]
+        tds = row.find_elements(By.TAG_NAME, 'td')
+        td = tds[column]
+        if keyword in td.text:
+            return (True, f'one result found for {keyword}')
+        return (False, f'{keyword} not found in {td.text}')
+    else:
+        for row in rows:
+            tds = row.find_elements(By.TAG_NAME, 'td')
+            td = tds[column]
+            if keyword not in td.text:
+                return (False, f'{keyword} not found in {td.text}')
+        return (True, f'{keyword} found in every row')
