@@ -6,11 +6,15 @@ from selenium.webdriver.common.by import By
 from utils.urls import URLs
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
+import os
 
 def init_driver():
     # Create a new instance of the Chrome driv
     options = webdriver.ChromeOptions()
     options.add_argument('--log-level=3') # set log level to SEVERE
+    options.add_experimental_option("prefs", {
+        "download.default_directory": os.path.abspath(r'downloads'),
+    })
     driver = webdriver.Chrome(options=options)
     driver.maximize_window()
     return driver
@@ -76,9 +80,9 @@ def select_module(driver, module):
     # click the element
     element.click()
 
-def click_button(driver, text):
+def click_button(driver, text, idx=0):
     # find the element by the link text "Ver certificados"
-    element = driver.find_element(By.XPATH, f"//span[contains(text(),'{text}')]/ancestor::button")
+    element = driver.find_elements(By.XPATH, f"//span[contains(text(),'{text}')]/ancestor::button")[idx]
 
     # click the element
     element.click()
@@ -239,3 +243,74 @@ def UAC_check_search_results(driver, tablename, keyword, column, unique, expecte
             if keyword not in td.text:
                 return (False, f'{keyword} not found in {td.text}')
         return (True, f'{keyword} found in every row')
+    
+
+def set_date_field_value(driver, date_str):
+    # Find the input field element
+    input_elem = driver.find_element(By.XPATH, f"//label[contains(text(),'Año de grado / Año de retiro')]/ancestor::div[@class='v-text-field__slot']")
+    print(input_elem.get_attribute('outerHTML'))
+    # Click the input field to open the date picker
+    input_elem.click()
+    input_elem.click()
+    time.sleep(10)
+    '''
+    # Find the year input field and set its value to the year in the date string
+    year_input_elem = driver.find_element(By.XPATH, '//div[contains(@class, "v-date-picker-years")]/input')
+    year_input_elem.clear()
+    year_input_elem.send_keys(date_str[:4])
+
+    # Find the month input field and set its value to the month in the date string
+    month_input_elem = driver.find_element(By.XPATH, '//div[contains(@class, "v-date-picker-months")]/input')
+    month_input_elem.clear()
+    month_input_elem.send_keys(date_str[5:7])
+
+    # Find the day element and click it to select the day in the date string
+    day_elem_xpath = f'//button[@type="button" and contains(@class, "v-btn--rounded") and text()="{date_str[8:]}"]'
+    day_elem = driver.find_element(By.XPATH, day_elem_xpath)
+    day_elem.click()
+    '''
+
+def descargar_soporte(driver, idx):
+    table = driver.find_element(By.XPATH, f"//div[contains(text(), 'Mis Solicitudes')]/following-sibling::div//table")
+    tbody = table.find_element(By.TAG_NAME, 'tbody')
+    rows = tbody.find_elements(By.TAG_NAME, 'tr')
+    if len(rows) > 0:
+        row = rows[idx]
+        tds = row.find_elements(By.TAG_NAME, 'td')
+        anchor = tds[-2].find_element(By.TAG_NAME, 'a')
+        anchor.click()
+    else:
+        raise Exception('No records found')
+
+def descargar_certificado(driver, idx):
+    table = driver.find_element(By.XPATH, f"//div[contains(text(), 'Mis Solicitudes')]/following-sibling::div//table")
+    tbody = table.find_element(By.TAG_NAME, 'tbody')
+    rows = tbody.find_elements(By.TAG_NAME, 'tr')
+    if len(rows) > 0:
+        row = rows[idx]
+        tds = row.find_elements(By.TAG_NAME, 'td')
+        anchor = tds[-1].find_element(By.TAG_NAME, 'a')
+        anchor.click()
+    else:
+        raise Exception('No records found')
+
+def UAC_validate_downloaded_filename(file_name):
+    folder = os.path.abspath('downloads')
+    filename = max([os.path.join(folder, f) for f in os.listdir(folder)], key=os.path.getctime)
+    while 'crdownload' in filename or 'tmp' in filename:
+        print('waiting for download to finish ...')
+        time.sleep(5)
+        filename = max([os.path.join(folder, f) for f in os.listdir(folder)], key=os.path.getctime)
+    if os.path.basename(filename).startswith(file_name):
+        return (True, f'valid filename for {file_name}')
+    return (False, f'invalid filename for {file_name}')
+
+def click_solicitud(driver, idx):
+    table = driver.find_element(By.XPATH, f"//div[contains(text(), 'Mis Solicitudes')]/following-sibling::div//table")
+    tbody = table.find_element(By.TAG_NAME, 'tbody')
+    rows = tbody.find_elements(By.TAG_NAME, 'tr')
+    if len(rows) > 0:
+        row = rows[idx]
+        row.click()
+    else:
+        raise Exception('No records found')

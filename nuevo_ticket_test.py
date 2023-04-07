@@ -1,0 +1,1 @@
+# similar a todos los aggr test : se necesita función para validar URL de pagos, para eso hay que cambiar de tab
