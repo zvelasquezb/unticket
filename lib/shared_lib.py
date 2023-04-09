@@ -88,6 +88,12 @@ def click_button(driver, text, idx=0):
     # click the element
     element.click()
 
+def click_button_2(driver, text, idx=1):
+    # find the element
+    element = driver.find_elements(By.XPATH, f"//span[contains(text(),'{text}')]/ancestor::button")[idx]
+    # click the element
+    element.click()
+
 def enter_input_value(driver, label, value):
     # Find the label element with the matching text
     label_element = driver.find_element(By.XPATH, f"//label[contains(text(),'{label}')]")
