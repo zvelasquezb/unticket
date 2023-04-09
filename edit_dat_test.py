@@ -27,7 +27,7 @@ def edit_dat_test(driver, program_action, tipo_doc, num_doc, program_data=None):
             shared.select_value(driver, 'Programa', program_data[0])
 
             if program_data[1] != 'Estudiante Activo':
-                shared.set_date_field_value(driver, program_data[2])
+                shared.set_date_field_value(driver, 0, 'Año de grado / Año de retiro', program_data[2])
 
             shared.click_button(driver, 'Guardar', 1)
 
@@ -45,6 +45,8 @@ def edit_dat_test(driver, program_action, tipo_doc, num_doc, program_data=None):
 
         shared.click_button(driver, 'Guardar')
 
+        time.sleep(10)
+
         print(f'EDIT DAT: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
@@ -55,7 +57,7 @@ def edit_dat_test(driver, program_action, tipo_doc, num_doc, program_data=None):
 if __name__ == "__main__":
     driver = shared.init_driver()
     login(driver, input('Username: '), getpass('Password: '))
-    shared.select_role(driver, 'Solicitante')
+    shared.select_role(driver, 'Administrador')
     time.sleep(5)
     # 0 : nothing
     # 1 : add

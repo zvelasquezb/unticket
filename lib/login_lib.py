@@ -36,13 +36,13 @@ def login_to_unal_ldap(driver, username, password):
 
 def confirm_google_account(driver):
     wait = WebDriverWait(driver, 10)
-    continuar_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='Continuar']/ancestor::button")))
+    continuar_button = wait.until(EC.presence_of_element_located((By.XPATH, "//span[text()='Continuar' or text()='Continue']/ancestor::button")))
     continuar_button.click()
 
 def click_use_another_account(driver):
     wait = WebDriverWait(driver, 10)
     # Click the "Use another account" link
-    use_another_account = wait.until(EC.presence_of_element_located((By.XPATH, "//li//*[contains(text(), 'Usar otra cuenta')]")))
+    use_another_account = wait.until(EC.presence_of_element_located((By.XPATH, "//li//*[contains(text(), 'Usar otra cuenta') or contains(text(), 'Use another account')]")))
     use_another_account.click()
 
 def UAC_check_google_unal_domain(driver):
@@ -62,5 +62,5 @@ def login_to_google(driver, username):
     email_field.send_keys(username)
 
     # Click the "Next" button
-    next_button = driver.find_element(By.XPATH, "//span[text()='Siguiente']/ancestor::button")
+    next_button = driver.find_element(By.XPATH, "//span[text()='Siguiente' or text()='Next']/ancestor::button")
     next_button.click()
