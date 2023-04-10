@@ -20,5 +20,15 @@ FILTERS = {
             'column': 4,
             'unique': False,
         },
+    },
+    'certificados': {
+        'nombre': {
+            'column': 0,
+            'unique': True,
+        },
+        'grupo': {
+            'column': 1,
+            'unique': False,
+        },
     }
 }

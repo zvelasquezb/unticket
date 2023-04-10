@@ -3,11 +3,10 @@ from lib.aggr_acl_lib import click_solicitud, write_acl
 from login_test import login_test as login
 from getpass import getpass
 import lib.shared_lib as shared
-from edit_sol_test import edit_sol_test
 
+# Test de agregar aclaracion como solicitante
 def aggr_acl(driver, keyword, acl):
   shared.select_role(driver, 'Solicitante')
-
   UAC = 0
   passed = 0
 
@@ -31,10 +30,7 @@ def aggr_acl(driver, keyword, acl):
 
 if __name__ == '__main__':
   driver = shared.init_driver()
-  u = 'pgrisales'
-  p = 'Tengoalza99'
-  #login(driver, input('Username: '), getpass('Password: '))
-  login(driver, u, p)
+  login(driver, input('Username: '), getpass('Password: '))
   aggr_acl(driver, keyword='1512', acl='prueba 1234')
 
 
