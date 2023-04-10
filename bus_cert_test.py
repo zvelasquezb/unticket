@@ -5,18 +5,19 @@ import lib.shared_lib as shared
 import traceback
 import utils.filters as filters
 
+# Test buscar certificado - admin
 def bus_cert_test(driver, filter, keyword, expected):
     
     UAC = 1
     passed = 0
 
     try:
-
+        # Select module 
         shared.select_module(driver, 'Ver certificados')
         time.sleep(10)
-
+       
+        # Buscar certificado
         shared.search(driver, 'Certificados', keyword)
-
         time.sleep(5)
 
         result = shared.UAC_check_search_results(driver, 'Certificados', keyword, filter['column'], filter['unique'], expected)
@@ -31,6 +32,7 @@ def bus_cert_test(driver, filter, keyword, expected):
 if __name__ == "__main__":
     driver = shared.init_driver()
     login(driver, input('Username: '), getpass('Password: '))
+    # Select role
     shared.select_role(driver, 'Administrador')
     time.sleep(5)
     bus_cert_test(driver, filter=filters.FILTERS['certificados']['nombre'], keyword='Mi Certificado 642cdf22', expected=True)
