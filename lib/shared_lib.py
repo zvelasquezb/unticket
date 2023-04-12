@@ -347,3 +347,10 @@ def UAC_validate_downloaded_filename(file_name):
 def UAC_validate_input_field(driver, targetInputFieldLabel, expectedValue):
     input = driver.find_element(By.XPATH, f"//label[text()='{targetInputFieldLabel}']/following-sibling::input")
     return (input.text == expectedValue, f'The input field with label {targetInputFieldLabel} does not match value: {expectedValue}')
+
+def change_tab(original_window):
+    for window_handle in driver.window_handles:
+        if window_handle != original_window:
+            driver.switch_to.window(window_handle)
+            break
+
