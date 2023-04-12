@@ -1,4 +1,3 @@
-# basarse en bus_sol_test pero solo usar username como filter
 import time
 from getpass import getpass
 from login_test import login_test as login
@@ -8,7 +7,7 @@ import os
 import traceback
 import utils.filters as filters
 
-def bus_usu_test(driver, filter, keyword,expected):
+def bus_usu_test(driver, filter, keyword, expected):
     UAC=1
     passed=0
 
@@ -33,5 +32,5 @@ if __name__ == "__main__":
     login(driver, input('Username: '), getpass('Password: '))
     shared.select_role(driver, 'Administrador')
     time.sleep(5)
-    bus_usu_test(driver,  filter=filters.FILTERS['solicitudes']['username'] ,keyword='miguel',expected=False)
-    bus_usu_test(driver,  filter=filters.FILTERS['solicitudes']['id'] ,keyword='mvilladas',expected=True)
+    bus_usu_test(driver, filter=filters.FILTERS['usuarios']['username'], keyword='miguel', expected=False)
+    bus_usu_test(driver, filter=filters.FILTERS['usuarios']['username'], keyword='mvilladas', expected=True)

@@ -8,7 +8,7 @@ FILTERS = {
             'column': 1,
             'unique': False,
         },
-        'username': {
+        'nombre_solicitante': {
             'column': 2,
             'unique': False,
         },
@@ -30,5 +30,11 @@ FILTERS = {
             'column': 1,
             'unique': False,
         },
-    }
+    },
+    'usuarios': {
+        'username': {
+            'column': 0,
+            'unique': True,
+        }
+    },
 }

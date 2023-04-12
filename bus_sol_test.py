@@ -37,4 +37,4 @@ if __name__ == "__main__":
     time.sleep(5)
     bus_sol_test(driver, filter=filters.FILTERS['solicitudes']['id'], keyword='1511', expected=True)
     bus_sol_test(driver, filter=filters.FILTERS['solicitudes']['id'], keyword='3000', expected=False)
-    bus_sol_test(driver, filter=filters.FILTERS['solicitudes']['username'], keyword='Zamir', expected=True)
+    bus_sol_test(driver, filter=filters.FILTERS['solicitudes']['nombre_solicitante'], keyword='Zamir', expected=True)

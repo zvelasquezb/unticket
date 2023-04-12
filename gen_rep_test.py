@@ -1,4 +1,3 @@
-# basarse en edit_dat_test y en des_arch_test para validar nombre de archivo
 import time
 from selenium.webdriver.common.by import By
 from getpass import getpass
@@ -9,9 +8,9 @@ import utils.datetime_id as id
 import os
 import traceback
 
-def gen_rep_test(driver, program_action, periodo_academico,f_inicio,f_final):
+def gen_rep_test(driver, report, periodo_academico=None, f_inicio=None, f_final=None):
 
-    UAC = 1
+    UAC = 0
     passed = 0
 
     try:
@@ -19,32 +18,31 @@ def gen_rep_test(driver, program_action, periodo_academico,f_inicio,f_final):
         shared.select_module(driver, 'Generar reporte')
         time.sleep(5)
 
-        if program_action == 1:
+        if report == 1:
             shared.select_value(driver, 'Periodo Académico', periodo_academico)
             time.sleep(5)
             shared.click_button(driver, 'Generar')
             time.sleep(5)
-        elif program_action == 2:
+        elif report == 2:
             shared.click_button(driver, 'reporte histórico')
             time.sleep(5)
-        elif program_action == 3:
+        elif report == 3:
             shared.click_button(driver, 'reporte periodo actual')
             time.sleep(5)
-        elif program_action == 4:
-            shared.set_date_field_value(driver,1,'Inicio', f_inicio,idx=0)
+        elif report == 4:
+            shared.set_date_field_value(driver, 1, 'Inicio', f_inicio)
             time.sleep(5)
-            shared.set_date_field_value(driver,1,'Final', f_final,idx=0)
+            shared.set_date_field_value(driver, 1, 'Final', f_final)
             time.sleep(5)
-            shared.click_button_2(driver, 'Generar')
+            shared.click_button(driver, 'Generar', idx=1)
 
             time.sleep(5)
 
-
+        print(f'GEN REP: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
         traceback.print_exc()
-        print(f'EDIT DAT: {passed}/{UAC} UAC PASSED')
-
+        print(f'GEN REP: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":
     driver = shared.init_driver()
@@ -52,13 +50,13 @@ if __name__ == "__main__":
     time.sleep(10)
     shared.select_role(driver, 'Administrador')
     time.sleep(5)
-    # 0 : nothing
+
     # 1 : Reporte periodo academico
     # 2 : Reporte Historico
     # 3 : Reporte Periodo Actual
     # 4 : Reporte por fechas
     
-    gen_rep_test(driver, program_action=1, periodo_academico='2023-1', f_inicio='2023/04/04',f_final='2023/04/08')
-    #gen_rep_test(driver, program_action=2, periodo_academico='2023-1', f_inicio='2023/04/04',f_final='2023/04/08')
-    #gen_rep_test(driver, program_action=3, periodo_academico='2023-1', f_inicio='2023/04/04',f_final='2023/04/08')
-    #gen_rep_test(driver, program_action=4, periodo_academico='2023-1', f_inicio='2023/04/04',f_final='2023/04/08')
+    gen_rep_test(driver, report=1, periodo_academico='2023-1')
+    gen_rep_test(driver, report=2)
+    gen_rep_test(driver, report=3)
+    gen_rep_test(driver, report=4, f_inicio='2023/04/04', f_final='2023/04/08')

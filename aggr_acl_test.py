@@ -1,12 +1,13 @@
 import time
-from lib.aggr_acl_lib import click_solicitud, write_acl
+import lib.aggr_acl_lib as aggr_acl
 from login_test import login_test as login
 from getpass import getpass
 import lib.shared_lib as shared
 import utils.filters as filters
+import traceback
 
 # Test de agregar aclaracion - solicitante
-def aggr_acl(driver, filter, keyword, acl, expected):
+def aggr_acl_test(driver, id, respuesta):
 
   UAC = 1
   passed = 0
@@ -16,30 +17,32 @@ def aggr_acl(driver, filter, keyword, acl, expected):
     shared.select_module(driver, 'Mis solicitudes')
     time.sleep(5)
     
-    shared.search(driver, 'Solicitudes', keyword)
+    shared.search(driver, 'Mis Solicitudes', id)
     time.sleep(5)
     
-    click_solicitud(driver, 0)
+    aggr_acl.click_solicitud(driver, 0)
     time.sleep(5)
 
-    write_acl(driver, acl)
+    shared.enter_textarea_value(driver, 'Respuesta', respuesta)
+    shared.click_button(driver, 'Guardar')
     time.sleep(5)
   
     # Check if request's state has changed 
-    shared.search(driver, 'Solicitudes', keyword)
-    result = shared.UAC_check_search_results(driver, 'Solicitudes', keyword, filter['column'], filter['unique'], expected)
+    shared.search(driver, 'Mis Solicitudes', id)
+    result = shared.UAC_validate_saved_record(driver, 'Mis Solicitudes', [id, 'En trámite'], 0)
     passed += shared.evaluate_UAC_result(result)
 
-    print(f'aggr_acl_test COMPLETED: {passed}/{UAC} UAC PASSED')
+    print(f'AGGR ACL: {passed}/{UAC} UAC PASSED')
   except Exception as e:
     traceback.print_exc()
-    print(f'aggr_acl_test FAILED: {passed}/{UAC} UAC PASSED')
+    print(f'AGGR ACL: {passed}/{UAC} UAC PASSED')
 
 if __name__ == '__main__':
   driver = shared.init_driver()
   login(driver, input('Username: '), getpass('Password: '))
   shared.select_role(driver, 'Solicitante')
-  aggr_acl(driver, filter=filters.FILTERS['solicitudes']['id'], keyword='1512', acl='prueba 1234', expected='En trámite')
+  #aggr_acl_test(driver, id='1512', respuesta='aclaración 1512')
+  aggr_acl_test(driver, id='1508', respuesta='aclaración 1508')
 
 
 
