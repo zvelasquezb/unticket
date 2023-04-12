@@ -23,11 +23,11 @@ def bus_cert_test(driver, filter, keyword, expected):
         result = shared.UAC_check_search_results(driver, 'Certificados', keyword, filter['column'], filter['unique'], expected)
         passed += shared.evaluate_UAC_result(result)
 
-        print(f'BUS SOL: {passed}/{UAC} UAC PASSED')
+        print(f'BUS CERT: {passed}/{UAC} UAC PASSED')
 
     except Exception as e:
         traceback.print_exc()
-        print(f'BUS SOL: {passed}/{UAC} UAC PASSED')
+        print(f'BUS CERT: {passed}/{UAC} UAC PASSED')
 
 if __name__ == "__main__":
     driver = shared.init_driver()
