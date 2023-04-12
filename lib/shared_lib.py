@@ -354,3 +354,6 @@ def change_tab(original_window):
             driver.switch_to.window(window_handle)
             break
 
+def close_tab():
+    driver.close()
+
